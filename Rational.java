@@ -67,3 +67,55 @@ public class Rational extends Number implements Comparable<Rational> {
         BigInteger d = denominator.multiply(second.numerator);
         return new Rational(n, d);
     }
+
+     @Override
+    public String toString() {
+        if (denominator.equals(BigInteger.ONE)) {
+            return numerator.toString();
+        } else {
+            return numerator + "/" + denominator;
+        }
+    }
+
+    /** Two rationals are equal if their difference has numerator 0 */
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (!(other instanceof Rational)) return false;
+        Rational r = (Rational) other;
+        return this.subtract(r).numerator.equals(BigInteger.ZERO);
+    }
+
+    // Implement abstract methods from Number
+
+    @Override
+    public int intValue() {
+        return doubleValue() > Integer.MAX_VALUE
+             ? Integer.MAX_VALUE
+             : (int) doubleValue();
+    }
+
+    @Override
+    public long longValue() {
+        return (long) doubleValue();
+    }
+
+    @Override
+    public float floatValue() {
+        return (float) doubleValue();
+    }
+
+    @Override
+    public double doubleValue() {
+        return numerator.doubleValue() / denominator.doubleValue();
+    }
+
+    // Implement compareTo for Comparable<Rational>
+
+    @Override
+    public int compareTo(Rational o) {
+        // Compare this − o via numerator of the difference
+        BigInteger diffNum = this.subtract(o).numerator;
+        return diffNum.signum();  // −1, 0, or 1
+    }
+}
